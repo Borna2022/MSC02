@@ -1,0 +1,20 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MSC02.Models
+{
+    public class BaseEntity
+    {
+        public string Id { get; set; }
+
+        [Display(Name = "ساخته شده در ")]
+        [Required]
+        [MaxLength(50, ErrorMessage = "حداکثر 50 کاراکتر")]
+        public DateTime CreateDate { get; set; }
+
+
+        [Display(Name ="ویرایش ده در")]
+        public DateTime ModifiedDate { get; set; }
+        public bool ItemStatus { get; set; }
+       
+    }
+}
