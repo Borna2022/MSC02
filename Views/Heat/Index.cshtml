@@ -1,0 +1,62 @@
+﻿@model List<Heat>
+@{
+    int i = 1;
+    var sample = new Heat();
+}
+<table class="table table-striped">
+    <thead class="bg-info text-light">
+        <tr>
+            <th>ردیف</th>
+            <th><label asp-for="@sample.DailyNumber"></label></th>
+            <th><label asp-for="@sample.HeatNumber"></label></th>
+            <th><label asp-for="@sample.Grade"></label></th>
+            <th><label asp-for="@sample.Note"></label></th>
+            <th><label asp-for="@sample.ModifiedDate"></label></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@i</td>
+                <td>@item.DailyNumber</td>
+                <td>@item.HeatNumber</td>
+                <td>@item.Grade</td>
+                <td>@item.Note</td>
+                <td>@item.ModifiedDate</td>
+            </tr>
+            i++;
+        }
+    </tbody>
+</table>
+@* @model List<Heat>
+@{
+    int i = 1;
+}
+<table class="table table-striped">
+    <thead class="bg-info text-light ">
+        <tr>
+            <th>ردیف</th>
+            <th><label asp-for="@Model.FirstOrDefault()"></label></th>
+            <th>شماره ذوب</th>
+            <th>شماره گرید</th>
+            <th> شرح</th>
+            <th>اصلاح شده در زمان</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+
+            <tr>
+                <td>@i</td>
+                <td>@item.DailyNumber</td>
+                <td>@item.HeatNumber</td>
+                <td>@item.Grade</td>
+                <td>@item.Note</td>
+                <td>@item.ModifiedDate</td>
+            </tr>
+            i++;
+        }
+    </tbody>
+</table> *@

@@ -6,14 +6,14 @@ namespace MSC02.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<HomeController> _logger; // constructor
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger) // DI
         {
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult Index() //Actions Index non crud
         {
             return View();
         }
