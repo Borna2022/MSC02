@@ -1,4 +1,5 @@
-﻿@{
+﻿```html
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -7,3 +8,34 @@
     @* <h1 class="display-4">سوال لول 2 یی نپرس</h1> *@
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core"></a>.</p>
 </div>
+
+<h2>دمای فعلی:</h2>
+<p id="temperature">در حال دریافت...</p>
+@* 
+a: پرامیس : نتیجه‌ای که الان شاید آماده نباشد
+b:  then :  وقتی پرامیس آماده شد، این کار را انجام بده
+c: await در این تابع منتظر نتیجه‌ی پرامیس بمان
+d: تابع اسینک میتواند از اویت استفاده کند   
+ *@
+@* 1. Promise Chaining -حالت دن و پرومیس *@
+@* حتی response.json() هم Promise دارد *@
+@* <script>
+    fetch('/api/temperature')
+    
+        .then(response => response.json()) 
+        .then(data => {
+            document.getElementById('temperature').textContent = data;
+        });
+</script> *@
+@* 2. async/await is better than promise chaining  *@
+@* یک درخواست فرستادم؛ نتیجه‌اش فعلاً حاضر نیست؛ وقتی آماده شد، آن را در رسپونس قرار بده. *@
+<script>
+    async function getTemperature(){
+        const response = await fetch('/api/temperature');
+        const data = await response.json();
+        document.getElementById('temperature').textContent = data;
+    }
+    getTemperature();
+
+</script>
+
