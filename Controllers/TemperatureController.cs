@@ -1,17 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-
+using MSC02.Services;
 
 namespace MSC02.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class TemperatureController : Controller
+public class TemperatureController : ControllerBase
 {
     [HttpGet]
     public int GetTemperature()
     {
-        return 25 ;
+        return TemperatureStore.CurrentTemperature;
     }
-
 }

@@ -1,41 +1,41 @@
-﻿```html
-@{
+﻿@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
     <h1 class="display-4">welcome to my web site</h1>
+    @* این عنوان فقط برای نمایش در صفحه است *@
     @* <h1 class="display-4">سوال لول 2 یی نپرس</h1> *@
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core"></a>.</p>
+
+    <p>
+        Learn about
+        <a href="https://learn.microsoft.com/aspnet/core"></a>.
+    </p>
 </div>
 
 <h2>دمای فعلی:</h2>
+
 <p id="temperature">در حال دریافت...</p>
-@* 
-a: پرامیس : نتیجه‌ای که الان شاید آماده نباشد
-b:  then :  وقتی پرامیس آماده شد، این کار را انجام بده
-c: await در این تابع منتظر نتیجه‌ی پرامیس بمان
-d: تابع اسینک میتواند از اویت استفاده کند   
- *@
-@* 1. Promise Chaining -حالت دن و پرومیس *@
-@* حتی response.json() هم Promise دارد *@
-@* <script>
-    fetch('/api/temperature')
-    
-        .then(response => response.json()) 
-        .then(data => {
-            document.getElementById('temperature').textContent = data;
-        });
-</script> *@
-@* 2. async/await is better than promise chaining  *@
-@* یک درخواست فرستادم؛ نتیجه‌اش فعلاً حاضر نیست؛ وقتی آماده شد، آن را در رسپونس قرار بده. *@
+
 <script>
-    async function getTemperature(){
+
+    // این تابع دما را از آدرس مربوط به دما دریافت می‌کند
+    async function getTemperature() {
+
+        // اینجا یک درخواست برای گرفتن دمای فعلی ارسال می‌شود
         const response = await fetch('/api/temperature');
+
+        // پاسخ دریافتی از حالت غیرقابل استفاده به مقدار قابل استفاده تبدیل می‌شود
         const data = await response.json();
+
+        // مقدار دما در صفحه قرار می‌گیرد
         document.getElementById('temperature').textContent = data;
     }
+
+    // هنگام باز شدن صفحه یک بار دما را دریافت کن
     getTemperature();
 
-</script>
+    // هر یک ثانیه دوباره دما را دریافت کن
+    setInterval(getTemperature, 5000);
 
+</script>

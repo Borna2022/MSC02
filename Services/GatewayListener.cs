@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Sockets;
+using Serilog;
 
 namespace MSC02.Services;
 
@@ -7,22 +8,73 @@ public class GatewayListener
 {
     public async Task StartAsync()
     {
-        TcpListener listener = new TcpListener(IPAddress.Loopback, 6000);
+        // ایجاد شنونده برای ارتباط با گیت‌وی روی درگاه ۶۰۰۰
+        TcpListener listener = new TcpListener(
+            IPAddress.Loopback,
+            6000);
 
+        // شروع گوش دادن
         listener.Start();
 
-        Console.WriteLine("MSC02: منتظر اتصال Gateway هستم...");
+        Console.WriteLine("ام‌اس‌سی‌۰۲: منتظر اتصال گیت‌وی هستم...");
 
-        TcpClient client = await listener.AcceptTcpClientAsync();
+        // برنامه همیشه منتظر گیت‌وی بعدی می‌ماند
+        while (true)
+        {
+            // منتظر ماندن تا گیت‌وی متصل شود
+            TcpClient client = await listener.AcceptTcpClientAsync();
 
-        Console.WriteLine("MSC02: Gateway متصل شد.");
+            Console.WriteLine("ام‌اس‌سی‌۰۲: گیت‌وی متصل شد.");
 
-        byte[] buffer = new byte[1024];
+            // ایجاد فضای موقت برای داده‌های دریافتی
+            byte[] buffer = new byte[1024];
 
-        int bytesRead = await client.GetStream().ReadAsync(buffer);
+            // خواندن داده از ارتباط
+            int bytesRead = await client.GetStream().ReadAsync(buffer);
 
-        string telegram = System.Text.Encoding.UTF8.GetString(buffer, 0, bytesRead);
+            // تبدیل داده‌های دریافتی به متن
+            string telegram = System.Text.Encoding.UTF8.GetString(
+                buffer,
+                0,
+                bytesRead);
 
-        Console.WriteLine($"MSC02: Telegram دریافت شد: {telegram}");
+            // ثبت تلگرام دریافت‌شده
+            Log.Information(
+                "تلگرام دریافت شد: {Telegram}",
+                telegram);
+
+            try
+            {
+                // جدا کردن مقدار دما از تلگرام
+                string temperatureText = telegram.Split('|')[1];
+
+                // تبدیل مقدار دما از متن به عدد
+                int temperature = int.Parse(temperatureText);
+
+                // ذخیره آخرین دمای دریافت‌شده
+                TemperatureStore.CurrentTemperature = temperature;
+
+                // ثبت اطلاعات دما
+                Log.Information(
+                    "تلگرام دریافت شد | گیت‌وی: {Gateway} | نوع: {Type} | دما: {Temperature}",
+                    "GW01",
+                    "TEMP",
+                    temperature);
+            }
+            catch (Exception ex)
+            {
+                // ثبت خطای پردازش تلگرام
+                Log.Error(
+                    ex,
+                    "خطا در پردازش تلگرام: {Telegram}",
+                    telegram);
+            }
+
+            // بستن ارتباط با گیت‌وی
+            client.Close();
+
+            Console.WriteLine(
+                "ام‌اس‌سی‌۰۲: منتظر تلگرام بعدی هستم...");
+        }
     }
 }
